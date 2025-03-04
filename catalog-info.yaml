@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pro-paysvs-console-tools
+  tags:
+    - pillar-pro-pay
+    - valuestream-payroll
+    - subvaluestream-pay
+  description: This repository contains console scripts, for batch or bash
+  annotations:
+    github.com/project-slug: UKGEPIC/pro-paysvs-console-tools
+    ghas/enabled: "false"
+    trove/enabled: "false"
+spec:
+  type: library
+  lifecycle: production
+  system: library
+  owner: user:default/rodolfo-dagum_ukg
