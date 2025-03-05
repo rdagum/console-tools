@@ -1,0 +1,16 @@
+[main]
+overwrite = true
+diff = false
+spacecount = 4
+
+[transformers]
+    [transformers.AssignmentNormalizer]
+        equal_sign_type = 'equal_sign'
+    [transformers.NormalizeNewLines]
+        section_lines = 2
+    [transformers.SplitTooLongLine]
+        line_length = 140
+    [transformers.DiscardEmptySections]
+    [transformers.NormalizeSectionHeaderName]
+    [transformers.NormalizeSettingName]
+    [transformers.ReplaceRunKeywordIf]
