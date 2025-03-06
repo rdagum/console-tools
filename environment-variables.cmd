@@ -41,7 +41,7 @@ set ARTIFACTORY_DNS=ukgartifactory.jfrog.io
 set ARTIFACTORY_URL=https://%ARTIFACTORY_DNS%/artifactory/
 set ARTIFACTORY_USERNAME=%USERNAME%
 set SONAR_HOST_URL=https://sonarqube.ascentis.com
-set REPORT_PORTAL_URL=https://reportportal.ascentis.com/
+set REPORT_PORTAL_URL=http://10.209.172.201:8080/
 set REPORT_PORTAL_UUID=2d321b85-be43-44a1-9427-bd9731c184ba
 
 :: Override settings with custom configuration for the given server

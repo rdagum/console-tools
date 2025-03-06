@@ -7,6 +7,9 @@ source environment-variables.sh
 
 ./subtitle.sh Setting up Robot Framework Requirements
 
+echo -e "\e[31mWarning: This script is not ready yet.\e[0m"
+exit 1
+
 # Install ChromeDriver.
 wget -N ${ARTIFACTORY_URL}ascentis-generic/QAA/chromedriver/chromedriver_linux64-84.0.4147.30.zip -P ~/
 unzip ~/chromedriver_linux64-84.0.4147.30.zip -d ~/
