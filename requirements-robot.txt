@@ -1,0 +1,17 @@
+wheel
+pylint
+robotframework-assertion-engine
+robotframework
+robotframework-browser
+robotframework-databaselibrary
+robotframework-debuglibrary
+robotframework-faker
+robotframework-jsonlibrary
+robotframework-metrics
+robotframework-pabot
+robotframework-tidy
+robotframework-Pdf2TextLibrary
+robotframework-excel
+robotframework-retryfailed
+robotframework-cygnus @ https://ukgartifactory.jfrog.io/artifactory/ascentis-qaa-python-local/robotframework-cygnus/1.1.8357/robotframework_cygnus-1.1.8357-57-py3-none-any.whl
+rfhub2

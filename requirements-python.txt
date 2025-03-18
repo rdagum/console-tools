@@ -1,0 +1,5 @@
+pylint
+pytest
+pytest-cov
+requests-mock
+pytest_rabbitmq
