@@ -107,68 +107,6 @@ pushd %ROBOT_TEST_RESULTS_PATH%
 if %threads% gtr 1 (
     echo Running Robot with %threads% threads...
     echo.
-    if [%PROJECT_NAME%]==[asc-pr-payroll-automation_master] (
-        if [%mode%]==[regression] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[post-release] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[smoke] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[sanity] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[ess] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[quick] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        if [%mode%]==[load] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-        )
-        call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-        exit /b 0
-    )
-    if [%PROJECT_NAME%]==[asc-hcm-hr-automation] (
-        if [%mode%]==[payroll-regression] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-            )
-        if [%mode%]==[quick] (
-            call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% -i %mode% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-            call robot --rerunfailed %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %resourcefile% %tags% %vars% %params% --output %ROBOT_TEST_RESULTS_PATH%rerun.xml %ROBOT_TEST_PATH%\suites
-            call rebot --merge --output %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml -l %ROBOT_TEST_RESULTS_PATH%log_%browser%.html -r %ROBOT_TEST_RESULTS_PATH%report_%browser%.html %ROBOT_TEST_RESULTS_PATH%output_%browser%.xml %ROBOT_TEST_RESULTS_PATH%rerun.xml
-            exit /b 0
-            )
-        call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-        exit /b 0
-    )
     call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
     call python %PYTHON_VENV%\..\Lib\site-packages\CygnusLibrary\report_publish.py
     exit /b 0
