@@ -108,7 +108,6 @@ if %threads% gtr 1 (
     echo Running Robot with %threads% threads...
     echo.
     call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-    call python %PYTHON_VENV%\..\Lib\site-packages\CygnusLibrary\report_publish.py
     exit /b 0
 
 ) else (

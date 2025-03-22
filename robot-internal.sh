@@ -133,14 +133,14 @@ fi
 
 REPORTS_PARAMS="--log $LOG --report $REP --output $OUT --xunit $XUN"
 
-# Handle rerun parameter
-# if [ -n "$rerun" ]; then
-#   params+=" --rerunfailed ${ROBOT_TEST_RESULTS_PATH}${OUT}"
-# else
-#   if [ "$mobile_device" == "unknown" ]; then
-#     rm -rf "${ROBOT_TEST_RESULTS_PATH}"*
-#   fi
-# fi
+Handle rerun parameter
+if [ -n "$rerun" ]; then
+  params+=" --rerunfailed ${ROBOT_TEST_RESULTS_PATH}${OUT}"
+else
+  if [ "$mobile_device" == "unknown" ]; then
+    rm -rf "${ROBOT_TEST_RESULTS_PATH}"*
+  fi
+fi
 
 # Display configuration
 echo "Environment: $env"
@@ -167,7 +167,6 @@ pushd "$ROBOT_TEST_RESULTS_PATH" > /dev/null
 if [ "$threads" -gt 1 ]; then
   echo "Running Robot with $threads threads..."
   pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes "$threads" $ordering_param $resourcefile_param $tags $vars $params $REPORTS_PARAMS "$ROBOT_TESTS_PATH"
-  python "$PYTHON_VENV/../Lib/site-packages/CygnusLibrary/report_publish.py"
 else
   echo "Running Robot in single thread..."
   echo ROBOT_TESTS_PATH $ROBOT_TESTS_PATH
