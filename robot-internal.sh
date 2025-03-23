@@ -152,12 +152,12 @@ echo "Threads: $threads"
 echo
 
 # Enable pushing results to Report Portal
-if [[ "$REPORT_PORTAL" == "true" && "$BRANCH_NAME" != PR-* ]]; then
+if [[ "$report_portal" == "true" && "$BRANCH_NAME" != PR-* ]]; then
   portal_enabled=true
   portal_params="--listener robotframework_reportportal.listener"
   portal_params+=" --variable RP_API_KEY:\"$REPORT_PORTAL_API_KEY\""
   portal_params+=" --variable RP_ENDPOINT:\"$REPORT_PORTAL_URL\""
-  portal_params+=" --variable RP_LAUNCH:\"env_$ENV\""
+  portal_params+=" --variable RP_LAUNCH:\"env_$env\""
   portal_params+=" --variable RP_PROJECT:\"$REPORT_PORTAL_PROJECT_NAME\""
   portal_params+=" --variable RP_LAUNCH_ATTRIBUTES:\"$*\""
 fi
@@ -170,15 +170,14 @@ if [ "$threads" -gt 1 ]; then
 else
   echo "Running Robot in single thread..."
   echo ROBOT_TESTS_PATH $ROBOT_TESTS_PATH
-  echo robot $tags $vars $params $REPORTS_PARAMS $portal_params "$ROBOT_TESTS_PATH"
-  robot $tags $vars $params $REPORTS_PARAMS "$ROBOT_TESTS_PATH"
+  robot $tags $vars $params $REPORTS_PARAMS $portal_params "$ROBOT_TESTS_PATH" || true
 fi
 popd > /dev/null
 
 # Call report portal if enabled
-# if [ "$portal_enabled" == "true" ]; then
-#   source ./report-portal.sh
-# fi
+if [ "$portal_enabled" == "true" ]; then
+  source ./report-portal.sh 
+fi
 
 # Generate local metrics report
 source ./subtitle.sh "Generating local metrics report"

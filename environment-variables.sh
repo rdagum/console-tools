@@ -60,9 +60,7 @@ if [ -z "$VARIABLES_LOADED" ]; then
     ARTIFACTORY_USERNAME=$USER
     SONAR_HOST_URL=https://sonarqube.ascentis.com
     REPORT_PORTAL_URL=http://10.209.172.201:8080/
-    REPORT_PORTAL_UUID=2d321b85-be43-44a1-9427-bd9731c184ba
-    REPORT_PORTAL_API_KEY=robot-script_FoCCUmy3R8O6HH7X3nRW8CGmlV0Z8cB-e9nhuwEDIFmpv9S3Hn6AKKkDcAfYfS1A
-
+    
     # Override settings with custom configuration for the given server
     if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$HOST.sh ]
     then

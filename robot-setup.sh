@@ -4,7 +4,7 @@
 set -e
 
 # Save the current directory and change to the script's directory
-pushd $(dirname $(readlink -f $BASH_SOURCE))
+pushd $(dirname $(readlink -f $BASH_SOURCE)) > /dev/null
 
 # Source the environment variables script
 source ./environment-variables.sh

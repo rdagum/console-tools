@@ -12,7 +12,7 @@ then
 fi
 source ./subtitle.sh Setting up Python Virtual Environment
 
-pushd $PROJECT_ROOT
+pushd $PROJECT_ROOT > /dev/null
 python3 -m venv .venv
 
 $PYTHON_VENV/python3 -m pip install --upgrade pip
