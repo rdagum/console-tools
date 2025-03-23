@@ -27,15 +27,10 @@ source ./subtitle.sh "Installing Browser library dependencies..."
 source ./playwright-setup.sh
 
 # Initialize the Robot Framework Browser library
-rfbrowser init --skip-browsers
+rfbrowser init
 
 # End the subtitle for browser library dependencies
-./subtitle-end.sh "Done installing Browser library dependencies..."
-
-# Check if any command failed
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+source ./subtitle-end.sh "Done installing Browser library dependencies..."
 
 # Deactivate the Python virtual environment
 deactivate
@@ -43,7 +38,6 @@ deactivate
 # Return to the original directory
 popd > /dev/null
 
-exit 0
 
 # # Install ChromeDriver.
 # wget -N ${ARTIFACTORY_URL}ascentis-generic/QAA/chromedriver/chromedriver_linux64-84.0.4147.30.zip -P ~/

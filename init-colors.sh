@@ -9,6 +9,7 @@ COLOR_BLUE="\e[34m"
 COLOR_MAGENTA="\e[35m"
 COLOR_CYAN="\e[36m"
 COLOR_WHITE="\e[37m"
+COLOR_LBLUE="\e[36m"
 
 # Background color variables
 BG_BLACK="\e[40m"

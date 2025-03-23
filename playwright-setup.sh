@@ -36,6 +36,3 @@ if [ "$DOWNLOAD" = true ]; then
   date +"%b %d %Y" > "$DOWNLOAD_TIMESTAMP_FILE"
   source ./subtitle-end.sh "Done installing playwright browsers"
 fi
-
-# Exit the script
-exit 0

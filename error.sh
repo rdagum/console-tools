@@ -8,6 +8,6 @@ else
 fi
 
 ERROR_MESSAGE=$*
-echo -e $COLOR_ERROR
-echo -e "    ERROR: $ERROR_MESSAGE"
-echo -e $COLOR_RESET
+printf "$COLOR_ERROR"
+printf "    ERROR: $ERROR_MESSAGE\n"
+printf "$COLOR_RESET\n"

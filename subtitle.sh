@@ -8,7 +8,6 @@ else
 fi
 
 SUBTITLE=$*
-echo -e $COLOR_LBLUE
-echo -e "______________________________________________________________________________________________"
-echo -e "### $SUBTITLE"
-echo -e $COLOR_RESET
+printf "$COLOR_LBLUE ______________________________________________________________________________________________ \n"
+printf " ### $SUBTITLE\n"
+printf "$COLOR_RESET\n"

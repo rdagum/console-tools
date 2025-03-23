@@ -48,7 +48,7 @@ if [ -z "$VARIABLES_LOADED" ]; then
     echo TEST_RESULTS_FOLDER=$TEST_RESULTS_FOLDER
     echo PYTHON_VENV=$PYTHON_VENV
 
-    . ./subtitle.sh "Setting up Default Settings"
+    source ./subtitle.sh "Setting up Default Settings"
 
     if [ "$BUILD_NUMBER" == "" ]
     then
@@ -57,30 +57,31 @@ if [ -z "$VARIABLES_LOADED" ]; then
 
     ARTIFACTORY_DNS=ukgartifactory.jfrog.io
     ARTIFACTORY_URL=https://$ARTIFACTORY_DNS/artifactory/
-    ARTIFACTORY_USERNAME=$USERNAME
+    ARTIFACTORY_USERNAME=$USER
     SONAR_HOST_URL=https://sonarqube.ascentis.com
+    REPORT_PORTAL_URL=http://10.209.172.201:8080/
+    REPORT_PORTAL_UUID=2d321b85-be43-44a1-9427-bd9731c184ba
+    REPORT_PORTAL_API_KEY=robot-script_FoCCUmy3R8O6HH7X3nRW8CGmlV0Z8cB-e9nhuwEDIFmpv9S3Hn6AKKkDcAfYfS1A
 
     # Override settings with custom configuration for the given server
-    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$computername.sh ]
+    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$HOST.sh ]
     then
-        echo     Overriding default configuration with $computername.sh
+        echo     Overriding default configuration with $HOST.sh
         echo
-        ./$BUILD_FOLDER_FULL_PATH/custom-config/$computername.sh
+        source $BUILD_FOLDER_FULL_PATH/custom-config/$HOST.sh
     fi
     # Override settings with custom configuration for the given user
-    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$username.sh ]
+    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$USER.sh ]
     then
-        echo     Overriding default configuration with $username.sh
+        echo     Overriding default configuration with $USER.sh
         echo
-        ./$BUILD_FOLDER_FULL_PATH/custom-config/$username.sh
+        source $BUILD_FOLDER_FULL_PATH/custom-config/$USER.sh
     fi
 
     echo ARTIFACTORY_URL=$ARTIFACTORY_URL
     echo ARTIFACTORY_USERNAME=$ARTIFACTORY_USERNAME
     echo SONAR_HOST_URL=$SONAR_HOST_URL
 
-
-    # VARIABLES_LOADED=TRUE
     export VARIABLES_LOADED=true
 
 fi

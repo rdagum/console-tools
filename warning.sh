@@ -8,6 +8,6 @@ else
 fi
 
 WARN=$*
-echo -e $COLOR_WARNING
-echo -e "    WARN: $WARN"
-echo -e $COLOR_RESET
+printf "$COLOR_WARNING"
+printf "    WARN: $WARN\n"
+printf "$COLOR_RESET\n"

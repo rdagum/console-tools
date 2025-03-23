@@ -7,7 +7,7 @@ else
     . console-tools/init-colors.sh
 fi
 
-SUBTITLE=$*
-echo -e $COLOR_HEADING1
-echo -e "    $SUBTITLE"
-echo -e $COLOR_RESET
+HEADING=$*
+printf "$COLOR_HEADING1\n"
+printf "    $HEADING"
+printf "$COLOR_RESET\n"

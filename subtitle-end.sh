@@ -10,11 +10,9 @@ source ./init-colors.sh
 SUBTITLE="$*"
 
 # Print the subtitle with a timestamp in light blue color
-echo -e "${COLOR_LBLUE}"
-echo -e "<<< $(date +"%T"); $SUBTITLE"
-echo -e "${COLOR_RESET}"
+printf "$COLOR_LBLUE"
+printf " <<< $(date +"%T"); $SUBTITLE\n"
+printf "$COLOR_RESET\n"
 
 # Return to the original directory
 popd > /dev/null
-
-exit 0
