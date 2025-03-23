@@ -8,15 +8,15 @@ IF ERRORLEVEL 1 EXIT /B 1
 if not defined OUT set OUT=output_chromium.xml
 if not defined ENV set ENV=manual
 if not defined RP_LAUNCH_ATTRIBUTES set RP_LAUNCH_ATTRIBUTES=%*
-set "RP_LAUNCH_ATTRIBUTES=%RP_LAUNCH_ATTRIBUTES:portal_enabled:true=%"
-set "RP_LAUNCH_ATTRIBUTES=%RP_LAUNCH_ATTRIBUTES:ordering:suite_order.txt=%"
+set "RP_LAUNCH_ATTRIBUTES=%RP_LAUNCH_ATTRIBUTES:portal_enabled:true= %"
+set "RP_LAUNCH_ATTRIBUTES=%RP_LAUNCH_ATTRIBUTES:ordering:suite_order.txt= %"
 if not defined RP_LAUNCH_ATTRIBUTES set RP_LAUNCH_ATTRIBUTES=attributes:none
 if not defined LAUNCH_PREFIX set LAUNCH_PREFIX=env
 if not defined LAUNCH_POSTFIX set LAUNCH_POSTFIX=%ENV%
 if not defined BUILD_URL% set BUILD_URL=null
 if not defined BUILD_NUMBER set BUILD_NUMBER=0
 if not defined LAUNCH_END set LAUNCH_END=%BUILD_NUMBER%
-SET RP_LAUNCH=%LAUNCH_PREFIX%_%LAUNCH_POSTFIX% buildnumber=%LAUNCH_END%
+SET RP_LAUNCH=%LAUNCH_PREFIX%_%LAUNCH_POSTFIX%
 
 SET output_filename=%ROBOT_TEST_RESULTS_PATH%\%OUT%
 
@@ -40,7 +40,7 @@ echo RP_LAUNCH_ATTRIBUTES: %RP_LAUNCH_ATTRIBUTES%
 echo Report File: %OUT%
 
 pushd %ROBOT_TEST_RESULTS_PATH%
-call post_report --variable RP_API_KEY:%REPORT_PORTAL_API_KEY% --variable RP_ENDPOINT:%REPORT_PORTAL_URL% --variable RP_LAUNCH:%RP_LAUNCH% --variable RP_PROJECT:"%REPORT_PORTAL_PROJECT_NAME%" --variable "RP_LAUNCH_ATTRIBUTES:%RP_LAUNCH_ATTRIBUTES%"  --variable verify_ssl:false %OUT%
+call post_report --variable RP_API_KEY:%REPORT_PORTAL_API_KEY% --variable RP_ENDPOINT:%REPORT_PORTAL_URL% --variable RP_LAUNCH:%RP_LAUNCH% --variable RP_PROJECT:%REPORT_PORTAL_PROJECT_NAME% --variable "RP_LAUNCH_ATTRIBUTES:%RP_LAUNCH_ATTRIBUTES%"  --variable verify_ssl:false %OUT%
 
 IF ERRORLEVEL 1 EXIT /B 1
 popd

@@ -118,7 +118,7 @@ if %threads% gtr 1 (
 popd
 
 if [%portal_enabled%] == [true] (
-    call report-portal.cmd
+    call report-portal.cmd %*
 )
 
 call subtitle.cmd Generating local metrics report
