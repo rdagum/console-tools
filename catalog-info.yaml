@@ -4,7 +4,7 @@ metadata:
   name: pro-paysvs-console-tools
   tags:
     - pillar-pro-pay
-    - valuestream-payroll
+    - valuestream-pay-admin-experience
     - subvaluestream-pay
   description: This repository contains console scripts, for batch or bash
   annotations:
