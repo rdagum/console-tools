@@ -17,7 +17,7 @@ python3 -m venv .venv
 
 $PYTHON_VENV/python3 -m pip install --upgrade pip
 
-# pip config set global.index-url ${ARTIFACTORY_URL}api/pypi/ascentis-python/simple
+# pip config set global.index-url ${ARTIFACTORY_URL}api/pypi/dagum-python/simple
 popd > /dev/null
 
 if [ "$PIP_PRE" != "" ]

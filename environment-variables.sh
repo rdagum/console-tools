@@ -55,10 +55,10 @@ if [ -z "$VARIABLES_LOADED" ]; then
         BUILD_NUMBER=0
     fi
 
-    ARTIFACTORY_DNS=ukgartifactory.jfrog.io
+    ARTIFACTORY_DNS=artifactory.jfrog.io
     ARTIFACTORY_URL=https://$ARTIFACTORY_DNS/artifactory/
     ARTIFACTORY_USERNAME=$USER
-    SONAR_HOST_URL=https://sonarqube.ascentis.com
+    SONAR_HOST_URL=https://sonarqube.dagum.me
     REPORT_PORTAL_URL=http://10.209.172.201:8080/
     
     # Override settings with custom configuration for the given server

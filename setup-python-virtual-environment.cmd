@@ -15,7 +15,7 @@ call python -m venv .venv
 IF ERRORLEVEL 1 EXIT /B 1
 call %PYTHON_VENV%\python -m pip install --upgrade pip
 IF ERRORLEVEL 1 EXIT /B 1
-@REM call pip config set global.index-url %ARTIFACTORY_URL%api/pypi/ascentis-python/simple
+@REM call pip config set global.index-url %ARTIFACTORY_URL%api/pypi/dagum-python/simple
 @REM IF ERRORLEVEL 1 EXIT /B 1
 popd
 
