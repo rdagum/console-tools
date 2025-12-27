@@ -80,7 +80,7 @@ if not [%mobile_app%]==[unknown] (
     )
 )
 
-set REPORTS_PARAMS=--log %LOG% --report %REP% --output %OUT% --xunit %XUN%
+set REPORTS_PARAMS=--log %LOG% --report %REP% --output %OUT% --xunit %XUN% --outputdir %ROBOT_TEST_RESULTS_PATH%
 if not [%rerun%]==[] (
     set params=--rerunfailed %ROBOT_TEST_RESULTS_PATH%%OUT% %params%
 ) else (
@@ -103,7 +103,7 @@ if x%REPORT_PORTAL%_%BRANCH_NAME:-=%==xtrue_%BRANCH_NAME% (
     set portal_params=--listener robotframework_reportportal.listener --variable RP_UUID:"%REPORT_PORTAL_UUID%" --variable RP_ENDPOINT:"%REPORT_PORTAL_URL%" --variable RP_LAUNCH:"env_%ENV%" --variable RP_PROJECT:"%REPORT_PORTAL_PROJECT_NAME%" --variable RP_LAUNCH_ATTRIBUTES:"%*"
 )
 
-pushd %ROBOT_TEST_RESULTS_PATH%
+pushd %PROJECT_ROOT%
 if %threads% gtr 1 (
     echo Running Robot with %threads% threads...
     echo.
