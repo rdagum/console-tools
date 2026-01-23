@@ -1,3 +1,7 @@
+# Explicitly require pydantic v2 to avoid conflicts with backend
+pydantic>=2.10.0
+pydantic-settings>=2.6.0
+
 pylint
 pytest
 pytest-cov

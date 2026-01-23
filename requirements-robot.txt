@@ -8,8 +8,8 @@ robotframework-assertion-engine
 robotframework
 robotframework-browser
 robotframework-databaselibrary
-# robotframework-debuglibrary
-# robotframework-faker
+robotframework-debuglibrary
+robotframework-faker
 robotframework-jsonlibrary
 robotframework-metrics
 robotframework-pabot
