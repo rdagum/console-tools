@@ -29,15 +29,33 @@ if [ -z "$VARIABLES_LOADED" ]; then
 
     # PYTHON PROJECT SPECIFIC VARIABLES
     PYTHON_VENV=$PROJECT_ROOT/.venv/bin
-    ROBOT_TEST_RESULTS_PATH=$BUILD_TEMP_FOLDER/robot-results/
-    ROBOT_TEST_PATH=$PROJECT_ROOT/automation/robot
 
-    if [ ! -f $ROBOT_TEST_RESULTS_PATH ]
-    then
-        mkdir -p $ROBOT_TEST_RESULTS_PATH
+    # On Windows (Git Bash/MSYS) the venv ships under Scripts/, on Linux under bin/.
+    if [ ! -d "$PYTHON_VENV" ] && [ -d "$PROJECT_ROOT/.venv/Scripts" ]; then
+        PYTHON_VENV=$PROJECT_ROOT/.venv/Scripts
     fi
 
-    ROBOT_TESTS_PATH=$PROJECT_ROOT/automation/robot/suites/
+    # Robot runs under the native (Windows) Python, which cannot resolve MSYS
+    # paths like /c/Users/...; convert to drive-letter form (C:/Users/...) when
+    # cygpath is available, mirroring the %PROJECT_ROOT:\=/% conversion in the
+    # .cmd chain. On Linux cygpath is absent and the path is used as-is.
+    to_native_path() {
+        if command -v cygpath > /dev/null 2>&1; then
+            cygpath -m "$1"
+        else
+            echo "$1"
+        fi
+    }
+
+    ROBOT_TEST_RESULTS_PATH="$(to_native_path "$BUILD_TEMP_FOLDER/robot-results")/"
+    ROBOT_TEST_PATH="$(to_native_path "$PROJECT_ROOT/automation/robot")"
+
+    if [ ! -d "$ROBOT_TEST_RESULTS_PATH" ]
+    then
+        mkdir -p "$ROBOT_TEST_RESULTS_PATH"
+    fi
+
+    ROBOT_TESTS_PATH="$(to_native_path "$PROJECT_ROOT/automation/robot/suites")/"
 
     echo PROJECT_NAME=$PROJECT_NAME
     echo PROJECT_UPSTREAM_FOLDER=$PROJECT_UPSTREAM_FOLDER
@@ -55,25 +73,31 @@ if [ -z "$VARIABLES_LOADED" ]; then
         BUILD_NUMBER=0
     fi
 
+    # Resolve host/user names across platforms (Linux exposes HOST/HOSTNAME/USER,
+    # Windows Git Bash exposes COMPUTERNAME/USERNAME), mirroring the %computername%
+    # and %username% lookups in the .cmd chain.
+    CONFIG_HOST="${HOST:-${HOSTNAME:-$COMPUTERNAME}}"
+    CONFIG_USER="${USER:-$USERNAME}"
+
     ARTIFACTORY_DNS=artifactory.jfrog.io
     ARTIFACTORY_URL=https://$ARTIFACTORY_DNS/artifactory/
-    ARTIFACTORY_USERNAME=$USER
+    ARTIFACTORY_USERNAME=$CONFIG_USER
     SONAR_HOST_URL=https://sonarqube.dagum.me
     REPORT_PORTAL_URL=http://10.209.172.201:8080/
-    
+
     # Override settings with custom configuration for the given server
-    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$HOST.sh ]
+    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$CONFIG_HOST.sh ]
     then
-        echo     Overriding default configuration with $HOST.sh
+        echo     Overriding default configuration with $CONFIG_HOST.sh
         echo
-        source $BUILD_FOLDER_FULL_PATH/custom-config/$HOST.sh
+        source $BUILD_FOLDER_FULL_PATH/custom-config/$CONFIG_HOST.sh
     fi
     # Override settings with custom configuration for the given user
-    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$USER.sh ]
+    if [ -f $BUILD_FOLDER_FULL_PATH/custom-config/$CONFIG_USER.sh ]
     then
-        echo     Overriding default configuration with $USER.sh
+        echo     Overriding default configuration with $CONFIG_USER.sh
         echo
-        source $BUILD_FOLDER_FULL_PATH/custom-config/$USER.sh
+        source $BUILD_FOLDER_FULL_PATH/custom-config/$CONFIG_USER.sh
     fi
 
     echo ARTIFACTORY_URL=$ARTIFACTORY_URL
