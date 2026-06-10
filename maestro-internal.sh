@@ -129,8 +129,16 @@ METRO_PID=""
 EMULATOR_STARTED="false"
 AUTOFILL_SERVICE_DISABLED="false"
 SAVED_AUTOFILL_SERVICE=""
+IOS_SIMULATOR_UDID=""
 
 cleanup() {
+  # Terminate the iOS app before Metro shuts down so SafariViewService can
+  # close its connections gracefully (avoids the "SafariViewService quit
+  # unexpectedly" crash dialog on macOS).
+  if [ -n "$IOS_SIMULATOR_UDID" ] && [ -n "${MAESTRO_APP_ID:-}" ]; then
+    echo "Terminating iOS app on simulator $IOS_SIMULATOR_UDID..."
+    xcrun simctl terminate "$IOS_SIMULATOR_UDID" "$MAESTRO_APP_ID" 2>/dev/null || true
+  fi
   if [ -n "$METRO_PID" ]; then
     echo "Stopping Metro bundler (PID $METRO_PID)..."
     kill "$METRO_PID" 2>/dev/null || true
@@ -308,18 +316,19 @@ preflight_ios() {
     fail "xcrun not found. Install Xcode from the Mac App Store"
   fi
 
-  # Check that at least one simulator is booted
-  BOOTED_UDID=$(xcrun simctl list devices booted --json 2>/dev/null \
+  # Check that at least one simulator is booted; expose the UDID to the
+  # outer scope so the cleanup handler can terminate the app gracefully.
+  IOS_SIMULATOR_UDID=$(xcrun simctl list devices booted --json 2>/dev/null \
     | grep -o '"udid" : "[^"]*"' | head -1 | grep -o '[0-9A-F-]\{36\}' || true)
-  if [ -z "$BOOTED_UDID" ]; then
+  if [ -z "$IOS_SIMULATOR_UDID" ]; then
     fail "No iOS Simulator is currently booted. Open Simulator.app, boot a device, and re-run"
   fi
   local booted_name
   booted_name=$(xcrun simctl list devices booted 2>/dev/null | grep -o '[^(]*' | head -1 | xargs || true)
-  echo "Booted simulator: $booted_name ($BOOTED_UDID)"
+  echo "Booted simulator: $booted_name ($IOS_SIMULATOR_UDID)"
 
   # Check that the app under test is installed on the booted simulator
-  if ! xcrun simctl get_app_container "$BOOTED_UDID" "$MAESTRO_APP_ID" 2>/dev/null | grep -q "/"; then
+  if ! xcrun simctl get_app_container "$IOS_SIMULATOR_UDID" "$MAESTRO_APP_ID" 2>/dev/null | grep -q "/"; then
     fail "$MAESTRO_APP_ID is not installed on the booted simulator. Build and install the dev client first"
   fi
   echo "App $MAESTRO_APP_ID is installed on the simulator"
@@ -374,6 +383,7 @@ echo "Backend API host for Metro: $E2E_DEV_API_HOST"
 # for inspection/cleanup and repeated runs don't pile up duplicates.
 MAESTRO_RUN_ID="$(date +%Y%m%d_%H%M%S)"
 MAESTRO_ENV_ARGS+=("-e" "MAESTRO_RUN_ID=$MAESTRO_RUN_ID")
+MAESTRO_ENV_ARGS+=("-e" "MAESTRO_APP_ID=$MAESTRO_APP_ID")
 
 # =============================================================================
 # Start Metro bundler in background (reuse a running instance)
