@@ -411,6 +411,17 @@ fi
 # =============================================================================
 source ./subtitle.sh "Running Maestro flows"
 
+# Platform-incompatible flows opt out via a per-platform tag ("ios-skip" /
+# "android-skip"). Append the running platform's skip tag to the exclude list so
+# those flows don't count as failures on a platform that can't run them (e.g.
+# iOS Universal Links require an associated TestFlight build, not a dev client).
+platform_skip_tag="${platform}-skip"
+if [ -n "$excludetags" ]; then
+  excludetags="${excludetags},${platform_skip_tag}"
+else
+  excludetags="$platform_skip_tag"
+fi
+
 # Display configuration
 echo "Platform: $platform"
 echo "Flows: ${flow:-(all)}"
