@@ -19,3 +19,4 @@ robotframework-tidy
 # robotframework-retryfailed
 robotframework-cygnus @ http://read_access:glpat-NzLZc8LRsMsTmDKbeyyu@gitlabu.hopto.org/api/v4/projects/67/packages/pypi/files/4259021604933af87ad9aca618e11a26e04de7cba37248b04294aca4397ffad5/robotframework_cygnus-1.1.81a0-py3-none-any.whl
 rfhub2
+robotframework-appiumlibrary
