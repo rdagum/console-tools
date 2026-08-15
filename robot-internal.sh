@@ -162,15 +162,20 @@ if [[ "$report_portal" == "true" && "$BRANCH_NAME" != PR-* ]]; then
   portal_params+=" --variable RP_LAUNCH_ATTRIBUTES:\"$*\""
 fi
 
-# Run Robot Framework tests
+# Run Robot Framework tests.
+# Capture the exit code explicitly: under `set -e` a non-zero robot/pabot exit
+# would otherwise abort the chain before the reports below are produced. The
+# test tool's exit code stays authoritative and is propagated at the very end
+# (Robot returns the number of failed tests, or 250+ for internal errors).
+EXIT_CODE=0
 pushd "$PROJECT_ROOT" > /dev/null
 if [ "$threads" -gt 1 ]; then
   echo "Running Robot with $threads threads..."
-  pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes "$threads" $ordering_param $resourcefile_param $tags $vars $params $REPORTS_PARAMS "$ROBOT_TESTS_PATH"
+  pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes "$threads" $ordering_param $resourcefile_param $tags $vars $params $REPORTS_PARAMS "$ROBOT_TESTS_PATH" || EXIT_CODE=$?
 else
   echo "Running Robot in single thread..."
   echo ROBOT_TESTS_PATH $ROBOT_TESTS_PATH
-  robot $tags $vars $params $REPORTS_PARAMS $portal_params "$ROBOT_TESTS_PATH" || true
+  robot $tags $vars $params $REPORTS_PARAMS $portal_params "$ROBOT_TESTS_PATH" || EXIT_CODE=$?
 fi
 popd > /dev/null
 
@@ -179,9 +184,23 @@ if [ "$portal_enabled" == "true" ]; then
   source ./report-portal.sh 
 fi
 
-# Generate local metrics report
+# Generate local metrics report. Post-processing only warns on failure so a
+# missing or broken report never turns a green run red — or a red run green.
 source ./subtitle.sh "Generating local metrics report"
-robotmetrics --inputpath "$ROBOT_TEST_RESULTS_PATH" --output "$OUT" --log "$LOG" -M "$test_metrics_file"
+if ! robotmetrics --inputpath "$ROBOT_TEST_RESULTS_PATH" --output "$OUT" --log "$LOG" -M "$test_metrics_file"; then
+  source ./warning.sh "robotmetrics failed; skipping the local metrics report"
+fi
 source ./subtitle-end.sh "Done generating local metrics report"
 
-exit 0
+# Report and propagate the Robot exit code: entry scripts (and CI) rely on this
+# to tell a passing run from a failing one.
+echo ""
+if [ "$EXIT_CODE" -eq 0 ]; then
+  source ./subtitle-end.sh "All Robot tests passed"
+else
+  source ./error.sh "Some Robot tests failed (exit code $EXIT_CODE)"
+fi
+
+popd > /dev/null
+
+exit "$EXIT_CODE"

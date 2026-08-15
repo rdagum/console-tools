@@ -1,7 +1,7 @@
 setlocal
 pushd %~dp0
 
-call .\console-tools\init-colors.cmd
+call init-colors.cmd
 
 set WARN=%*
 echo.%COLOR_WARNING%

@@ -103,29 +103,50 @@ if x%REPORT_PORTAL%_%BRANCH_NAME:-=%==xtrue_%BRANCH_NAME% (
     set portal_params=--listener robotframework_reportportal.listener --variable RP_UUID:"%REPORT_PORTAL_UUID%" --variable RP_ENDPOINT:"%REPORT_PORTAL_URL%" --variable RP_LAUNCH:"env_%ENV%" --variable RP_PROJECT:"%REPORT_PORTAL_PROJECT_NAME%" --variable RP_LAUNCH_ATTRIBUTES:"%*"
 )
 
+:: Run Robot Framework tests. The runners are invoked through subroutines so
+:: %ERRORLEVEL% is read outside a parenthesized block (inside one it would be
+:: expanded at parse time, before the tool has run). The exit code is kept and
+:: propagated at the very end, after the reports are produced.
+set ROBOT_EXIT_CODE=0
 pushd %PROJECT_ROOT%
-if %threads% gtr 1 (
-    echo Running Robot with %threads% threads...
-    echo.
-    call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-    exit /b 0
-
-) else (
-    echo Running Robot in single thread...
-    echo.
-    call robot %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
-)
+if %threads% gtr 1 (call :run_pabot) else (call :run_robot)
 popd
 
 if [%portal_enabled%] == [true] (
     call report-portal.cmd %*
 )
 
+:: Post-processing only warns on failure so a broken report never turns a green
+:: run red - or a red run green.
 call subtitle.cmd Generating local metrics report
-robotmetrics --inputpath %ROBOT_TEST_RESULTS_PATH% --output %OUT% --log %LOG% -M %test_metrics_file%
+robotmetrics --inputpath %ROBOT_TEST_RESULTS_PATH% --output %OUT% --log %LOG% -M %test_metrics_file% || call warning.cmd robotmetrics failed - skipping the local metrics report
 call subtitle-end.cmd Done generating local metrics report
 
-exit /B 0
+:: Report and propagate the Robot exit code: entry scripts (and CI) rely on this
+:: to tell a passing run from a failing one.
+echo.
+if "%ROBOT_EXIT_CODE%" == "0" (
+    call subtitle-end.cmd All Robot tests passed
+) else (
+    call error.cmd Some Robot tests failed - exit code %ROBOT_EXIT_CODE%
+)
+
+popd
+endlocal & exit /B %ROBOT_EXIT_CODE%
+
+:run_pabot
+echo Running Robot with %threads% threads...
+echo.
+call pabot --artifacts png --artifactsinsubfolders --pabotlib --pabotlibport 0 --processes %threads% %ordering% %resourcefile% %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
+set ROBOT_EXIT_CODE=%ERRORLEVEL%
+goto :eof
+
+:run_robot
+echo Running Robot in single thread...
+echo.
+call robot %tags% %vars% %params% %REPORTS_PARAMS% %ROBOT_TESTS_PATH%
+set ROBOT_EXIT_CODE=%ERRORLEVEL%
+goto :eof
 
 :parsetags
 set list=%~1
