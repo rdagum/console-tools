@@ -58,7 +58,16 @@ if not [%test%]==[] set params=--test %test% %params%
 if [%threads%]==[] set threads=3
 set params=--variable ROBOT_TEST_PATH:%ROBOT_TEST_PATH% %params%
 
-set PATH=%PYTHON27_PATH%;%PYTHON_SCRIPTS_PATH%;%WEB_DRIVERS_PATH%;%PATH%
+:: Prepend only the variables that are actually set: on hosts with
+:: NoDefaultCurrentDirectoryInExePath enabled, a %PATH% that starts with
+:: empty segments (from an undefined PYTHON27_PATH/PYTHON_SCRIPTS_PATH/
+:: WEB_DRIVERS_PATH) breaks cmd's own bare-name command resolution for
+:: every call after this line, even though the string still displays the
+:: later, valid directories correctly - "where" still finds them, "call"
+:: does not.
+if defined WEB_DRIVERS_PATH set PATH=%WEB_DRIVERS_PATH%;%PATH%
+if defined PYTHON_SCRIPTS_PATH set PATH=%PYTHON_SCRIPTS_PATH%;%PATH%
+if defined PYTHON27_PATH set PATH=%PYTHON27_PATH%;%PATH%
 
 if [%mobile_app%]==[unknown] (
     set test_metrics_file=test_metrics.html

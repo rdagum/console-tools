@@ -2,6 +2,12 @@
 :: GENERAL VARIABLES
 if [%VARIABLES_LOADED%]==[TRUE] exit /b 0
 pushd %~dp0
+:: Put this directory on PATH so the bare "call <tool>.cmd" convention used
+:: throughout console-tools resolves regardless of the caller's own cwd. On
+:: hosts with NoDefaultCurrentDirectoryInExePath set, cmd no longer searches
+:: the current directory implicitly, so every sibling call would otherwise
+:: fail with "not recognized".
+set PATH=%~dp0;%PATH%
 call subtitle.cmd Setting up Environment Variables
 pushd ..\
 SET BUILD_FOLDER_FULL_PATH=%CD%
