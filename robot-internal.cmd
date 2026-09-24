@@ -37,8 +37,21 @@ if not [%includetags%]==[] (
 )
 call :parsetags %excludetags% --exclude
 
+:: Threads decide the runner: pabot above 1, plain robot otherwise.
+if [%threads%]==[] set threads=3
+
+:: The ordering file is a pabot feature (it sequences the parallel processes),
+:: so it only applies when the run is multi-threaded; a single-threaded run
+:: executes the suite tree as-is and honours suite:/test: filters directly.
+set ordering_display=none
 if not [%ordering%]==[] (
-    set ordering=--ordering %ROBOT_TESTS_PATH%%ordering%
+    if %threads% gtr 1 (
+        set ordering_display=%ordering%
+        set ordering=--ordering %ROBOT_TESTS_PATH%%ordering%
+    ) else (
+        set ordering_display=%ordering% (ignored: single thread^)
+        set ordering=
+    )
 )
 
 if not [%resourcefile%]==[] (
@@ -55,7 +68,6 @@ if [%trace%] == [true] set params=--loglevel trace %params%
 if not [%suite%]==[] set params=--suite %suite% %params%
 if not [%test%]==[] set params=--test %test% %params%
 
-if [%threads%]==[] set threads=3
 set params=--variable ROBOT_TEST_PATH:%ROBOT_TEST_PATH% %params%
 
 :: Prepend only the variables that are actually set: on hosts with
@@ -104,6 +116,7 @@ echo Browser: %browser%
 echo Suite: %suite%
 echo Test: %test%
 echo Threads: %threads%
+echo Ordering: %ordering_display%
 echo.
 
 :: Enable pushing results from Jenkins to Report Portal when the branch is not a Pull Request (PR-)

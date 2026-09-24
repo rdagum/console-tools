@@ -77,10 +77,22 @@ if [ -n "$includetags" ]; then
 fi
 parsetags "$excludetags" --exclude
 
-# Set ordering and resource file parameters
+# Threads decide the runner: pabot above 1, plain robot otherwise.
+threads="${threads:-3}"
+
+# Set ordering and resource file parameters. The ordering file is a pabot
+# feature (it sequences the parallel processes), so it only applies when the
+# run is multi-threaded; a single-threaded run executes the suite tree as-is
+# and honours `suite:`/`test:` filters directly.
 ordering_param=""
+ordering_display="none"
 if [ -n "$ordering" ]; then
-  ordering_param="--ordering ${ROBOT_TESTS_PATH}${ordering}"
+  if [ "$threads" -gt 1 ]; then
+    ordering_param="--ordering ${ROBOT_TESTS_PATH}${ordering}"
+    ordering_display="$ordering"
+  else
+    ordering_display="$ordering (ignored: single thread)"
+  fi
 fi
 
 resourcefile_param=""
@@ -105,7 +117,6 @@ if [ -n "$test" ]; then
   params+=" --test $test"
 fi
 
-threads="${threads:-3}"
 params+=" --variable ROBOT_TEST_PATH:$ROBOT_TEST_PATH"
 
 # Set PATH
@@ -149,6 +160,7 @@ echo "Browser: $browser"
 echo "Suite: $suite"
 echo "Test: $test"
 echo "Threads: $threads"
+echo "Ordering: $ordering_display"
 echo
 
 # Enable pushing results to Report Portal
